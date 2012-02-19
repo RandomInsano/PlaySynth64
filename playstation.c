@@ -12,7 +12,7 @@ Controller readController()
 {
 	Controller output;
 
-	PORTB &= ~(1 << PB4);	// PlayStation attention line low
+	PORTB &= ~(1 << PB4);	// PlayStation attention line low. Controller is active low
 	PlayStationComm(0x01);	// Out: Begin				In: None
 	PlayStationComm(0x42);	// Out: Issue Read data 	In: Device mode [7-4], Payload length [3-0]
 	PlayStationComm(0xFF);	// Out: Ignored				In: Always 0xA5. Unknown purpose
@@ -32,6 +32,7 @@ Controller readController()
 }
 
 // Example of polling controller for data.
+#ifdef EXAMPLE
 void sample()
 {
 	PlayStationInit();
@@ -73,14 +74,18 @@ void sample()
 									// from digital to analog without it
 	}
 }
+#endif
 
 void spiInit()
 {
 	// Default speed of PlayStation SPI bus is 250KHz, which didn't work for me. Slower allowed stable results
+	// Turns out during the presentation the whole thing fell apart. Reason was due to lack of a real pull-up
+	// resistor. Adding that spare resistor not only saved my presentation at zero hour, but should allow much
+	// higher sample rates
 	DDRB  |= (1 <<  PB4) | (1 <<  PB5) | (1 << PB7);	// Set SPI out, clock and slave select for output
-	SPCR   = (1 <<  SPE) | (1 << MSTR);					// Enable SPI, set to master
+	SPCR   = (1 <<  SPE) | (1 << MSTR);					// Enable SPI, set to master mode
 	SPCR  |= (1 << CPOL) | (1 << CPHA);					// Set on fall, sample on rising
-	SPCR  |= (1 << DORD);								// LSB first
+	SPCR  |= (1 << DORD);								// LSB first. Derp! Lots of trial and error to find that out
 
 	SPCR  |= (1 << SPR1);								// SPI clock
 }

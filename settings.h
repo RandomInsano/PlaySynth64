@@ -11,6 +11,10 @@
 #include "mos8580.h"
 #include "noritake_vfd.h"
 
+// Not all of these configurations are settable
+// yet. Need to crack open my C64 Programmer's
+// Reference book to figure out the last three
+// options down there...
 typedef enum CONFIGURE
 {
 	INIT,		// No properties

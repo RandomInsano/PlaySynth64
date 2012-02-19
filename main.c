@@ -65,17 +65,20 @@ int main()
 
 	println("Play mode:");
 
+	// Main program loop
 	for (;;)
 	{
 		Controller control = readController();
 
-		// L2 and L1 are used to select octaves, so ignore them
-		// as notes.
-		// Circle is used to specify a sharp
+		// R1, L2, and L1 are used to select octaves, so ignore them
+		// as notes. R2 is used to specify a sharp.
+		// Ignore those buttons for figuring out the note 
 		switch (control.buttons & ~(PS_L1 | PS_L2 | PS_R1 | PS_R2))
 		{
 			case PS_START:		// Enter configuration menu
 				configure();
+
+				// Restore interface
 				println("Play mode:");
 				noteIndex = 12;
 				break;
@@ -124,11 +127,12 @@ int main()
 		frequency	= notes[noteIndex][0];
 		note		= notes[noteIndex][1];
 
-		// My old math made the binary too big. The work is based on
-		// the formula Freq = note x 2^(N/12). Note is the current
-		// note's frequency, N is how many notes we want to shift
-		// up or down.
-		// Allow shifting all eight octaves with fancy bit shifting
+		// My old math made the program binary too big for the AVR.
+		// The work is now based on the formula Freq = note x 2^(N/12). 
+		// Note is the current note's frequency, N is how many notes
+		// we want to shift up or down.
+		// Fancy bit shifting allows the shoulder buttons to represent
+		// a number between 0 and 7 inclusive
 		octave  = (control.buttons & PS_L2) >> 8;
 		octave |= (control.buttons & PS_L1) >> 9;
 		octave |= (control.buttons & PS_R1) >> 9;

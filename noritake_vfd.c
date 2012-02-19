@@ -11,7 +11,7 @@
 #include "noritake_vfd.h"
 
 // From ATMEGA16 data sheet
-void USART_Init( unsigned int ubrr)
+void USART_Init(unsigned int ubrr)
 {
 	/* Set baud rate */
 	UBRRH = (unsigned char)(ubrr>>8);
@@ -21,7 +21,7 @@ void USART_Init( unsigned int ubrr)
 }
 
 // From ATMEGA16 data sheet
-void USART_Transmit( unsigned char data )
+void USART_Transmit(unsigned char data)
 {
 	/* Wait for empty transmit buffer */
 	while (!(UCSRA & (1<<UDRE)));
@@ -72,6 +72,7 @@ void printnum(unsigned int number)
 
 	int			loop;
 
+	// Wow... What was I smoking when I wrote this?
 	for (loop = 10; loop > 2; loop--)
 	{
 		// Trim off higher numbers

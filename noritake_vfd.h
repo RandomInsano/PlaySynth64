@@ -25,7 +25,7 @@
 #define VFD_FK		0x18	// Katakana font
 #define VFD_ESC		0x1B	// Escape (used for advanced functions)
 
-// Advanced functions
+// Advanced functions (require VFD_ESC to directly preceed it)
 #define	VFDA_SUF	0x43	// Send user fond
 #define VFDA_PC		0x48	// Position cursor
 #define VFDA_SR		0x49	// Software reset

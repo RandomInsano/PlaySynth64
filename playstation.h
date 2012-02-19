@@ -30,8 +30,7 @@
 #define PS_CROSS	0x4000
 #define PS_SQUARE	0x8000
 
-// Going to try and use this structure, but
-// may take too much overhead. Will have to see
+// Never used. Handy as reference though
 typedef struct PSController
 {
 	unsigned int Select		: 1;
@@ -65,7 +64,6 @@ typedef union Controller
 	char			bytes[6];
 	unsigned int	buttons;
 } Controller;
-
 
 unsigned char PlayStationComm(unsigned char);
 void PlayStationInit();

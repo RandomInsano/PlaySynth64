@@ -24,7 +24,7 @@ void playFreq(unsigned char freq)
 	setSID(4,22);
 }
 
-int main2()
+int main()
 {
 	DDRD  |= 0x80;			// Set PD7 for output
 	TCCR2 |= (1 << WGM21);	// Clear TCNT2 on OCR2 match

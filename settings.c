@@ -6,6 +6,9 @@
 
 #include "settings.h"
 
+// Here's out default crumby song. It sounds awful, trust me.
+// It plays in a continuous loop in the background as a preview
+// for the current ADSR envelope and other settings.
 #define NUM_DEMO_NOTES 10
 unsigned int demoNotes[NUM_DEMO_NOTES] = {
 		0x0F00,
@@ -20,6 +23,7 @@ unsigned int demoNotes[NUM_DEMO_NOTES] = {
 		0x0D00
 };
 
+// Names of the different SID voices
 char *waveformEnum[4] =
 	{
 			"Triangle",
@@ -33,7 +37,7 @@ unsigned int changeValue(unsigned int, unsigned int, DELTA*);
 unsigned int changeNumber(unsigned int, unsigned int, DELTA*);
 unsigned int changeEnum(char**, unsigned int, unsigned int, DELTA*);
 
-// Sets which keys are new. Don't count releases
+// Keeps track of what buttons were pressed.
 void buttonDelta(unsigned int *input, unsigned int *history)
 {
 	unsigned int delta;
@@ -52,7 +56,7 @@ void configure()
 	static CONFIGURE state;
 	Controller control;
 	unsigned int oldControl	= 0;
-	unsigned int changed	= 0;	// If the menu need updating
+	unsigned int changed	= 0;	// If the menu needs updating
 	DELTA settingDelta 		= NONE;	// How much to change the current setting
 
 	state = INIT;
@@ -76,12 +80,13 @@ void configure()
 		playNote(0);
 		control = readController();
 
-		// Stops key repeat
+		// Prevents key repeat when the user holds the button down
 		buttonDelta(&control.buttons, &oldControl);
 
 		// Increment decrement setting
 		settingDelta = NONE;
 
+		// Handle button presses
 		switch (control.buttons)
 		{
 			case PS_SELECT:	// Escape config mode
@@ -89,12 +94,12 @@ void configure()
 				put(VFD_FF);
 				return;
 
-			case PS_UP:		// Go to previous config
+			case PS_UP:		// Go to previous config option
 				state--;
 				changed = 1;
 				break;
 
-			case PS_DOWN:	// Go to next config
+			case PS_DOWN:	// Go to next config option
 				state++;
 				changed = 1;
 				break;
@@ -112,8 +117,12 @@ void configure()
 		}
 
 		state %= WAVEFORM + 1;	// So we don't navigate to nowhere.
+								// As confusing as it is, WAVEFORM is just
+								// the last configuration option. When adding
+								// new options, change this. Should have used
+								// a sentry val
 
-		// Here's our menu
+		// Draw our menu
 		switch (state)
 		{
 			case VOLUME:
@@ -139,7 +148,8 @@ void configure()
 				brightness = changeNumber(brightness, 3, &settingDelta);
 				put(VFD_ESC);
 				put(VFDA_LUM);
-				put(brightness * 64);
+				put(brightness * 64);	// The hell? *64? Oh! 255/4=64. The Noritake
+										// VFD uses 0 to 255 for brightness.
 				break;
 
 			case ATTACK:
@@ -210,7 +220,7 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Synthoscope         ");
-					print("Edwin Amsler 2010   ");
+					print("Edwin Amsler    2010");
 					changed = 0;
 				}
 				break;
@@ -227,8 +237,8 @@ void playNote(unsigned int time)
 
 	// Ran out of time. Was going to use
 	// a timer + interrupt to play notes at
-	// a constant speed. Really ashame I didn't
-	// manage it
+	// a constant speed. Really ashamed that 
+	// I didn't manage it
 	pause++;
 	if (pause < 75)
 		return;
@@ -256,6 +266,7 @@ unsigned int changeEnum(char **list, unsigned int currvalue, unsigned int maxval
 	return output;
 }
 
+// One day, this'll show a bar. Ran out of time back then
 unsigned int changeNumber(unsigned int currvalue, unsigned int maxvalue, DELTA *delta)
 {
 	unsigned int output = changeValue(currvalue, maxvalue,delta);
