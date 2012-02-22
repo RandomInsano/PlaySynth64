@@ -228,10 +228,12 @@ void configure()
 			default:
 				if (changed)
 				{
+					//TODO: Scrolling credits. Left to right
+					
 					put(VFD_CLR);
 					put(VFD_FF);
-					print("Synthoscope         ");
-					print("Edwin Amsler    2010");
+					print("    PlaySynth 64    ");
+					print("EAmsler 2010 to 2012");
 					changed = 0;
 				}
 				break;
