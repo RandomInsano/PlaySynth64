@@ -160,8 +160,19 @@ void configure()
 					print("Note Attack:     <->");
 					changed = 0;
 				}
+				
+				// There's something critically wrong here (and in other cases below).
+				// Since we don't factor in the other half of the byte, setting this nibble
+				// is knocking the decay out of the picture. What needs to happen, is it needs
+				// to OR the decay nibble before setting the SID's register.
+				
+				// Since the SID is mostly read-only, it's the only way to do it.
 				attack = changeNumber(attack, 15, &settingDelta);
-				SIDSet(ATK_DECAY, attack << 4);
+				//SIDSet(ATK_DECAY, attack << 4);
+				
+				// EX: (Need to verify this works)
+				SIDSet(ATK_DECAY, attack << 4 || decay & 0x0F);
+				
 				break;
 
 			case DECAY:
@@ -217,10 +228,12 @@ void configure()
 			default:
 				if (changed)
 				{
+					//TODO: Scrolling credits. Left to right
+					
 					put(VFD_CLR);
 					put(VFD_FF);
-					print("Synthoscope         ");
-					print("Edwin Amsler    2010");
+					print("    PlaySynth 64    ");
+					print("EAmsler 2010 to 2012");
 					changed = 0;
 				}
 				break;
