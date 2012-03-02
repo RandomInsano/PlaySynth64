@@ -1,0 +1,23 @@
+=====================================
+   Parts you'll need to build this
+=====================================
+
+Just a quick rundown of what I put into this thus far.
+Consider it a guide, not gospel. 
+
+-------------------------------------
+QTY | Part
+-------------------------------------
+1     PlayStation 1 or 2 controller
+1     Serial Text VFD (20x2)
+1     MOS 6581 or 8580
+1     Atmel ATMEGA8L (might be discontinued)
+1     5v/12v (for 6581) or 5v/12v (for 8580) power supply
+
+1     1Kohm resistor  (for Pull-up on the PS Controller)
+
+2     X uF ceramic caps (for the SID's analog filtering)
+2     X uF electrolytic caps (DC decoupling for the ICs)
+
+1     Amplifier/Protection circuit (I copied the C64's)
+999   Bits I haven't bothered digging up yet
