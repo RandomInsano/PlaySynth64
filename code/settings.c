@@ -24,18 +24,13 @@ const unsigned short int demoNotes[NUM_DEMO_NOTES] = {
 };
 
 // Names of the different SID voices
-const unsigned char *waveformEnum[4] =
+const char *waveformEnum[4] =
 	{
 			"Triangle",
 			"Sawtooth",
 			"Square",
 			"Noise"
 	};
-
-
-unsigned int changeValue(unsigned char, unsigned char, DELTA*);
-unsigned int changeNumber(unsigned char, unsigned char, DELTA*);
-unsigned int changeEnum(char**, unsigned char, unsigned char, DELTA*);
 
 // Keeps track of what buttons were pressed.
 void buttonDelta(unsigned int *input, unsigned int *history)
@@ -267,9 +262,9 @@ void playNote(unsigned short int time)
 	SIDSet(CONTROL,   controlRegister | CNT_GATE);	// Gate the note (mute it)
 }
 
-unsigned int changeEnum(char **list, unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
+unsigned char changeEnum(const char **list, unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
 {
-	unsigned int output = changeValue(currvalue, maxvalue,delta);
+	unsigned char output = changeValue(currvalue, maxvalue,delta);
 
 	put(VFD_CR);
 	print("                   ");
@@ -280,9 +275,9 @@ unsigned int changeEnum(char **list, unsigned char currvalue, unsigned char maxv
 }
 
 // One day, this'll show a bar. Ran out of time back then
-unsigned int changeNumber(unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
+unsigned char changeNumber(unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
 {
-	unsigned int output = changeValue(currvalue, maxvalue,delta);
+	unsigned char output = changeValue(currvalue, maxvalue,delta);
 
 	put(VFD_CR);
 	printnum(output);
@@ -293,7 +288,7 @@ unsigned int changeNumber(unsigned char currvalue, unsigned char maxvalue, DELTA
 	return output;
 }
 
-unsigned int changeValue(unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
+unsigned char changeValue(unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
 {
 	if (*delta == DECREMENT)
 	{

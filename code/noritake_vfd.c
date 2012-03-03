@@ -40,7 +40,7 @@ void put(char out)
 	USART_Transmit(out);
 }
 
-void print(char* message)
+void print(const char* message)
 {
 	while(*message)
 	{
@@ -48,7 +48,7 @@ void print(char* message)
 	}
 }
 
-void println(char* message)
+void println(const char* message)
 {
 	print(message);
 	put(VFD_CR);

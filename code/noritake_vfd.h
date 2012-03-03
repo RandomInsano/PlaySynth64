@@ -37,8 +37,8 @@
 // High-level functions
 void VFDInit	(unsigned short int);
 
-void print		(char*);
-void println	(char*);
+void print		(const char*);
+void println	(const char*);
 void printnum	(unsigned int);
 void put		(char);
 void putnum     (unsigned char);

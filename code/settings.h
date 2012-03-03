@@ -40,4 +40,8 @@ typedef enum DELTA
 void playNote(unsigned short int);
 void configure();
 
+unsigned char changeValue(unsigned char, unsigned char, DELTA*);
+unsigned char changeNumber(unsigned char, unsigned char, DELTA*);
+unsigned char changeEnum(const char**, unsigned char, unsigned char, DELTA*);
+
 #endif
