@@ -2,9 +2,6 @@
 	Noritake VFD control header (noritake_vfd.h)
 	Author:	Edwin Amsler <edwinguy@gmail.com>
 	Date:	February 21, 2010
-
-	Made this for my Real-Time systems final
-	project.
 **************************************************/
 
 #ifndef NOTITAKE_VFD_H
@@ -25,7 +22,7 @@
 #define VFD_FK		0x18	// Katakana font
 #define VFD_ESC		0x1B	// Escape (used for advanced functions)
 
-// Advanced functions (require VFD_ESC to directly preceed it)
+// Advanced functions (require VFD_ESC to directly precede it)
 #define	VFDA_SUF	0x43	// Send user fond
 #define VFDA_PC		0x48	// Position cursor
 #define VFDA_SR		0x49	// Software reset
@@ -35,15 +32,15 @@
 #define VFDA_LUM75	0x80	//    75% Brightness
 #define VFDA_LUM100	0xFF	//   100% Brightness
 #define VFDA_FW		0x53	// Flickerless write
-#define VFDA_CBF	0x54	// Cursor blink freqency
+#define VFDA_CBF	0x54	// Cursor blink frequency
 
 // High-level functions
 void VFDInit	(unsigned short int);
 
-void print		(unsigned char*);
-void println	(unsigned char*);
+void print		(char*);
+void println	(char*);
 void printnum	(unsigned int);
-void put		(unsigned char);
+void put		(char);
 void putnum     (unsigned char);
 
 #endif

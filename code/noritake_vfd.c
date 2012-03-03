@@ -2,9 +2,6 @@
 	Noritake VFD control (noritake_vfd.c)
 	Author:	Edwin Amsler <edwinguy@gmail.com>
 	Date:	February 21, 2010
-
-	Made this for my Real-Time systems final
-	project.
 **************************************************/
 
 #include <avr/io.h>
@@ -38,12 +35,12 @@ void VFDInit(unsigned short int ubrr)
 	put(VFDA_SR);
 }
 
-void put(unsigned char out)
+void put(char out)
 {
 	USART_Transmit(out);
 }
 
-void print(unsigned char* message)
+void print(char* message)
 {
 	while(*message)
 	{
@@ -51,7 +48,7 @@ void print(unsigned char* message)
 	}
 }
 
-void println(unsigned char* message)
+void println(char* message)
 {
 	print(message);
 	put(VFD_CR);
