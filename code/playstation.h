@@ -61,7 +61,7 @@ typedef struct PSController
 typedef union Controller
 {
 	PSController	inputs;
-	char			bytes[6];
+	unsigned char	bytes[6];
 	unsigned int	buttons;
 } Controller;
 

@@ -11,17 +11,17 @@
 
 void delay()
 {
-	int a;
+	unsigned short int a;
 	for (a = 0; a < 10; a++) PORTC ^= 1;
 }
 
-// Initalize hardware to talk to the SID chip.
+// Initialize hardware to talk to the SID chip.
 void SIDInit()
 {
 	// Create an external 1MHz clock pulse on OC2
 	TCCR2 |= (1 << WGM21);	// Clear TCNT2 on OCR2 match
 	TCCR2 |= (1 << COM20);	// Toggle OC2 on match (each tick)
-	TCCR2 |= (1 << CS20);	// No prescale
+	TCCR2 |= (1 << CS20);	// No pre-scale
 
 	OCR2   = 0;				// Match on every clock tick
 
@@ -29,7 +29,7 @@ void SIDInit()
 	SID_ADDR_DIR  |= 0xFF;	// SID Address and OSC
 
 	// Zero all registers. SID really doesn't like being reset in hardware
-	char loop = 0;
+	unsigned char loop = 0;
 	for (; loop < ENV3; loop++) // ENV3 is the last register of the SID
 	{
 		SIDSet(loop, 0);

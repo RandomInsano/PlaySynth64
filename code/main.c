@@ -16,7 +16,7 @@
 #include "mos8580.h"
 #include "settings.h"
 
-unsigned int notes[13][2] =
+const unsigned short int notes[13][2] =
 {
 		{225, 'A'},
 		{239, 'A' | '#' << 8},
@@ -37,6 +37,7 @@ unsigned int notes[13][2] =
 #define BAUD	   4800	// Desired baud rate
 
 #define byte	unsigned char
+#define uint16  unsigned short int
 
 void printbyte(byte output)
 {
@@ -47,7 +48,7 @@ void printbyte(byte output)
 
 int main()
 {
-	// Initalize devices
+	// Initialize devices
 	PlayStationInit();
 	VFDInit(FOSC / 16 / BAUD - 1);
 	SIDInit();
@@ -57,11 +58,11 @@ int main()
 	SIDSet(ATK_DECAY, 0x09);
 	controlRegister = 0x13;
 
-	unsigned int frequency;
-	unsigned int oldFrequency = 0;
-	unsigned int note;
-	char octave;
-	char noteIndex;
+	uint16 frequency;
+	uint16 oldFrequency = 0;
+	uint16 note;
+	byte   octave;
+	byte   noteIndex;
 
 	println("Play mode:");
 

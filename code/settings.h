@@ -37,7 +37,7 @@ typedef enum DELTA
 	NONE
 } DELTA;
 
-void playNote(unsigned int);
+void playNote(unsigned short int);
 void configure();
 
 #endif

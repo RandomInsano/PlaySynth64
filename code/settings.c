@@ -10,7 +10,7 @@
 // It plays in a continuous loop in the background as a preview
 // for the current ADSR envelope and other settings.
 #define NUM_DEMO_NOTES 10
-unsigned int demoNotes[NUM_DEMO_NOTES] = {
+const unsigned short int demoNotes[NUM_DEMO_NOTES] = {
 		0x0F00,
 		0x0F00,
 		0x2000,
@@ -24,7 +24,7 @@ unsigned int demoNotes[NUM_DEMO_NOTES] = {
 };
 
 // Names of the different SID voices
-char *waveformEnum[4] =
+const unsigned char *waveformEnum[4] =
 	{
 			"Triangle",
 			"Sawtooth",
@@ -33,9 +33,9 @@ char *waveformEnum[4] =
 	};
 
 
-unsigned int changeValue(unsigned int, unsigned int, DELTA*);
-unsigned int changeNumber(unsigned int, unsigned int, DELTA*);
-unsigned int changeEnum(char**, unsigned int, unsigned int, DELTA*);
+unsigned int changeValue(unsigned char, unsigned char, DELTA*);
+unsigned int changeNumber(unsigned char, unsigned char, DELTA*);
+unsigned int changeEnum(char**, unsigned char, unsigned char, DELTA*);
 
 // Keeps track of what buttons were pressed.
 void buttonDelta(unsigned int *input, unsigned int *history)
@@ -61,7 +61,7 @@ void configure()
 
 	state = INIT;
 
-	// various configureable options
+	// various configurable options
 	static unsigned char volume		= 15;
 	static unsigned char brightness	= 3;
 	static unsigned char attack		= 0;
@@ -120,7 +120,7 @@ void configure()
 								// As confusing as it is, WAVEFORM is just
 								// the last configuration option. When adding
 								// new options, change this. Should have used
-								// a sentry val
+								// a sentry value
 
 		// Draw our menu
 		switch (state)
@@ -242,7 +242,7 @@ void configure()
 }
 
 // Plays a single note if it's time
-void playNote(unsigned int time)
+void playNote(unsigned short int time)
 {
 	static int position;
 	static unsigned int pause;
@@ -267,7 +267,7 @@ void playNote(unsigned int time)
 	SIDSet(CONTROL,   controlRegister | CNT_GATE);	// Gate the note (mute it)
 }
 
-unsigned int changeEnum(char **list, unsigned int currvalue, unsigned int maxvalue, DELTA *delta)
+unsigned int changeEnum(char **list, unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
 {
 	unsigned int output = changeValue(currvalue, maxvalue,delta);
 
@@ -280,7 +280,7 @@ unsigned int changeEnum(char **list, unsigned int currvalue, unsigned int maxval
 }
 
 // One day, this'll show a bar. Ran out of time back then
-unsigned int changeNumber(unsigned int currvalue, unsigned int maxvalue, DELTA *delta)
+unsigned int changeNumber(unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
 {
 	unsigned int output = changeValue(currvalue, maxvalue,delta);
 
@@ -293,7 +293,7 @@ unsigned int changeNumber(unsigned int currvalue, unsigned int maxvalue, DELTA *
 	return output;
 }
 
-unsigned int changeValue(unsigned int currvalue, unsigned int maxvalue, DELTA *delta)
+unsigned int changeValue(unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
 {
 	if (*delta == DECREMENT)
 	{

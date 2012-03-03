@@ -38,12 +38,12 @@
 #define VFDA_CBF	0x54	// Cursor blink freqency
 
 // High-level functions
-void VFDInit	(unsigned int);
+void VFDInit	(unsigned short int);
 
-void print		(char*);
-void println	(char*);
+void print		(unsigned char*);
+void println	(unsigned char*);
 void printnum	(unsigned int);
-void put		(char);
-void putnum     (char);
+void put		(unsigned char);
+void putnum     (unsigned char);
 
 #endif

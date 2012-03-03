@@ -11,7 +11,7 @@
 #include "noritake_vfd.h"
 
 // From ATMEGA16 data sheet
-void USART_Init(unsigned int ubrr)
+void USART_Init(unsigned short int ubrr)
 {
 	/* Set baud rate */
 	UBRRH = (unsigned char)(ubrr>>8);
@@ -29,7 +29,7 @@ void USART_Transmit(unsigned char data)
 	UDR = data;
 }
 
-void VFDInit(unsigned int ubrr)
+void VFDInit(unsigned short int ubrr)
 {
 	USART_Init(ubrr);
 
@@ -38,12 +38,12 @@ void VFDInit(unsigned int ubrr)
 	put(VFDA_SR);
 }
 
-void put(char out)
+void put(unsigned char out)
 {
 	USART_Transmit(out);
 }
 
-void print(char* message)
+void print(unsigned char* message)
 {
 	while(*message)
 	{
@@ -51,7 +51,7 @@ void print(char* message)
 	}
 }
 
-void println(char* message)
+void println(unsigned char* message)
 {
 	print(message);
 	put(VFD_CR);
@@ -59,7 +59,7 @@ void println(char* message)
 }
 
 // Print a single digit. Undefined if > 9
-void putnum(char num)
+void putnum(unsigned char num)
 {
 	put(num + 48); // 48 is ASCII code for 0
 }
