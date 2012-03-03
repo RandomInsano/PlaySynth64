@@ -54,8 +54,6 @@ void configure()
 	unsigned int changed	= 0;	// If the menu needs updating
 	DELTA settingDelta 		= NONE;	// How much to change the current setting
 
-	state = INIT;
-
 	// various configurable options
 	static unsigned char volume		= 15;
 	static unsigned char brightness	= 3;
@@ -65,10 +63,24 @@ void configure()
 	static unsigned char release	= 0;
 	static unsigned char waveform	= 0;
 
+	// Load our settings from EEPROM
+	if (eeprom_read_byte(INIT))
+	{
+		volume     = eeprom_read_byte((uint8_t*)VOLUME);
+		brightness = eeprom_read_byte((uint8_t*)BRIGHTNESS);
+		attack     = eeprom_read_byte((uint8_t*)ATTACK);
+		decay      = eeprom_read_byte((uint8_t*)DECAY);
+		sustain    = eeprom_read_byte((uint8_t*)SUSTAIN);
+		release    = eeprom_read_byte((uint8_t*)RELEASE);
+		waveform   = eeprom_read_byte((uint8_t*)WAVEFORM);
+	}
+
 	put(VFD_CLR);
 	put(VFD_FF);
 	println("Config Mode:");
 	print("Use directional pad");
+
+	state = INIT;
 
 	for(;;)
 	{
@@ -85,6 +97,21 @@ void configure()
 		switch (control.buttons)
 		{
 			case PS_SELECT:	// Escape config mode
+				put(VFD_CLR);
+				put(VFD_FF);
+				print("Saving settings...");
+
+				eeprom_write_byte((uint8_t*)VOLUME,     volume);
+				eeprom_write_byte((uint8_t*)BRIGHTNESS, brightness);
+				eeprom_write_byte((uint8_t*)ATTACK,     attack);
+				eeprom_write_byte((uint8_t*)DECAY,      decay);
+				eeprom_write_byte((uint8_t*)SUSTAIN,    sustain);
+				eeprom_write_byte((uint8_t*)RELEASE,    release);
+				eeprom_write_byte((uint8_t*)WAVEFORM,   waveform);
+
+				// Mark that we saved data
+				eeprom_write_byte(INIT, 1);
+
 				put(VFD_CLR);
 				put(VFD_FF);
 				return;
