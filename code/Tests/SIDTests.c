@@ -1,3 +1,5 @@
+#ifdef EXAMPLE_CODE
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -66,3 +68,4 @@ int main()
 	}
 }
 
+#endif
