@@ -44,5 +44,6 @@ void print		(char*);
 void println	(char*);
 void printnum	(unsigned int);
 void put		(char);
+void putnum     (char);
 
 #endif

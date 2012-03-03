@@ -59,7 +59,7 @@ void println(char* message)
 }
 
 // Print a single digit. Undefined if > 9
-inline void putnum(char num)
+void putnum(char num)
 {
 	put(num + 48); // 48 is ASCII code for 0
 }
