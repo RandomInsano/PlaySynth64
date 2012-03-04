@@ -5,6 +5,55 @@ This was a fun project I did for a Real-Time Systems course
 at the U of Manitoba. Plays music on a Commodore 64 SID chip
 using a PlayStation(2) controller.
 
-Planning on extending it once I've got some time. And uploading
-the electrical schematics so others can build this bad-ass
-musical machine!
+
+
+What it can do so far:
+-----------------------
+
+Configure voice #1 of the SID chip. Such enticing configurables as:
+  - Triangle, Sawtooth, Sine, Random waveforms.
+  - ADSR Envelope (http://en.wikipedia.org/wiki/Synthesizer#ADSR_envelope)
+  - Volume!
+
+Configure screen:
+  - Brightness! All four levels of it.
+
+Play notes!:
+ - Shoulder buttons for octave & sharp selection, face buttons for notes.
+ - Even some that don't exist! It's like the X-Files had an episode about synthesizers.
+
+Save settings to EEPROM:
+ - That's... probably working? Still need to test it.
+
+
+
+What I want it to do: (future features)
+-----------------------
+
+Storage:
+ - Save my silly songs to an SD card.
+ - Replay.
+ - Save to PC.
+
+Have head-to-head-to-head jamming:
+ - Have two more controllers for the other two voices.
+ - Everyting's better with friends!
+
+Quick instrument switching:
+ - Maybe just between voices at first.
+ - Cool to have everyone be able to switch quickly / independantly.
+
+Bring in external source:
+ - Pass through voice 3/filter
+
+Get some of the nuttier SID stuff in there:
+ - Low-pass / high pass filters.
+ - Freq cuttoffs.
+ - Freq pulse width adjust.
+ - Resonance.
+ - Sync voices (makes interesting effects so I hear).
+ - Ring modulation between multiple voices (for solo play, also for effects).
+
+Get random effects ideas from the demoscene
+ - Allow quick on / off from the circle button.
+ - Guitar peddle type effects (wah-wah, etc).
