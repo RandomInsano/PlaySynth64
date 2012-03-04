@@ -47,4 +47,6 @@ unsigned char changeValue(unsigned char, unsigned char, DELTA*);
 unsigned char changeNumber(unsigned char, unsigned char, DELTA*);
 unsigned char changeEnum(const char**, unsigned char, unsigned char, DELTA*);
 
+void LoadConfig();
+
 #endif

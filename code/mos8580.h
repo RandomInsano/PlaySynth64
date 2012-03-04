@@ -17,8 +17,8 @@
 #ifndef MOS8580_H
 #define MOS8580_H
 
-// There are three voices, each with indentical register offsets 
-#define	FREQ_LOW	0		// Low portion of the inital frequency.
+// There are three voices, each with identical register offsets
+#define	FREQ_LOW	0		// Low portion of the initial frequency.
 #define	FREQ_HIGH	1		// High portion.
 #define	PW_LOW		2		// Low part of pulse width of waveform.
 #define	PW_HIGH		3		// High part. First four bits only.

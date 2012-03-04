@@ -50,13 +50,9 @@ int main()
 {
 	// Initialize devices
 	PlayStationInit();
-	VFDInit(FOSC / 16 / BAUD - 1);
-	SIDInit();
-
-	// Set volume to max
-	SIDSet(MODE_VOL,  0x0F);
-	SIDSet(ATK_DECAY, 0x09);
-	controlRegister = 0x13;
+	VFDInit(FOSC / 16 / BAUD - 1);	// Configure display
+	SIDInit();						// Configure sound
+	LoadConfig();					// Load defaults from eeprom
 
 	uint16 frequency;
 	uint16 oldFrequency = 0;

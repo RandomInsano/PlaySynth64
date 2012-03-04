@@ -32,6 +32,18 @@ const char *waveformEnum[4] =
 			"Noise"
 	};
 
+// various configurable options.
+// NOTE: If we run out of memory, we can use Flash for swapping these
+//       values since we only read on boot, and when we run the config
+//       menu. We also only write on menu exit.
+unsigned char volume		= 15;
+unsigned char brightness	= 3;
+unsigned char attack		= 0;
+unsigned char decay			= 9;
+unsigned char sustain		= 0;
+unsigned char release		= 0;
+unsigned char waveform		= 0;
+
 // Keeps track of what buttons were pressed.
 void buttonDelta(unsigned int *input, unsigned int *history)
 {
@@ -53,27 +65,6 @@ void configure()
 	unsigned int oldControl	= 0;
 	unsigned int changed	= 0;	// If the menu needs updating
 	DELTA settingDelta 		= NONE;	// How much to change the current setting
-
-	// various configurable options
-	static unsigned char volume		= 15;
-	static unsigned char brightness	= 3;
-	static unsigned char attack		= 0;
-	static unsigned char decay		= 9;
-	static unsigned char sustain	= 0;
-	static unsigned char release	= 0;
-	static unsigned char waveform	= 0;
-
-	// Load our settings from EEPROM
-	if (eeprom_read_byte(INIT))
-	{
-		volume     = eeprom_read_byte((uint8_t*)VOLUME);
-		brightness = eeprom_read_byte((uint8_t*)BRIGHTNESS);
-		attack     = eeprom_read_byte((uint8_t*)ATTACK);
-		decay      = eeprom_read_byte((uint8_t*)DECAY);
-		sustain    = eeprom_read_byte((uint8_t*)SUSTAIN);
-		release    = eeprom_read_byte((uint8_t*)RELEASE);
-		waveform   = eeprom_read_byte((uint8_t*)WAVEFORM);
-	}
 
 	put(VFD_CLR);
 	put(VFD_FF);
@@ -193,7 +184,7 @@ void configure()
 				//SIDSet(ATK_DECAY, attack << 4);
 				
 				// EX: (Need to verify this works)
-				SIDSet(ATK_DECAY, attack << 4 || decay & 0x0F);
+				SIDSet(ATK_DECAY, (attack << 4) | (decay & 0x0f));
 				
 				break;
 
@@ -261,6 +252,38 @@ void configure()
 				break;
 		}
 	}
+}
+
+// Configure hardware based on EEPROM settings
+void LoadConfig()
+{
+	// Load SID registers from EEPROM
+	// TODO: Show some sort of progress or loading message
+
+	// Load our settings from EEPROM
+	if (eeprom_read_byte(INIT))
+	{
+		volume     = eeprom_read_byte((uint8_t*)VOLUME);
+		brightness = eeprom_read_byte((uint8_t*)BRIGHTNESS);
+		attack     = eeprom_read_byte((uint8_t*)ATTACK);
+		decay      = eeprom_read_byte((uint8_t*)DECAY);
+		sustain    = eeprom_read_byte((uint8_t*)SUSTAIN);
+		release    = eeprom_read_byte((uint8_t*)RELEASE);
+		waveform   = eeprom_read_byte((uint8_t*)WAVEFORM);
+	}
+
+	// Configure SID registers
+	SIDSet(MODE_VOL,        (0 << 4) | (volume  & 0x0f));	// Filter mode not implemented yet
+	SIDSet(ATK_DECAY,  (attack << 4) | (decay   & 0x0f));
+	SIDSet(STN_RLS,   (sustain << 4) | (release & 0x0f));
+	SIDSet(CONTROL, 1 << (4 + waveform));				// There's more to configure in this register,
+														// I just haven't enabled that yet
+	controlRegister = 0x13;
+
+	// Set VFD brightness
+	put(VFD_ESC);
+	put(VFDA_LUM);
+	put(brightness * 64);
 }
 
 // Plays a single note if it's time
