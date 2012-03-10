@@ -87,7 +87,7 @@ void spiInit()
 	SPCR  |= (1 << CPOL) | (1 << CPHA);					// Set on fall, sample on rising
 	SPCR  |= (1 << DORD);								// LSB first. Derp! Lots of trial and error to find that out
 
-	SPCR  |= (1 << SPR1);								// SPI clock
+	SPCR  |= (1 << SPR0) | (1 << SPI2X);				// SPI clock. Should be running at 250KHz (FOSC / 8)
 }
 
 void PlayStationInit()
