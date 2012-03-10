@@ -32,6 +32,13 @@ const char *waveformEnum[4] =
 			"Noise"
 	};
 
+// Boolean values
+const char *booleanEnum[2] =
+	{
+			"No",
+			"Yes"
+	};
+
 // Keeps track of what buttons were pressed.
 void buttonDelta(unsigned int *input, unsigned int *history)
 {

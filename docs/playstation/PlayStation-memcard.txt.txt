@@ -1,0 +1,12 @@
+/******************************************************************************
+	PlayStation Memory Card Desc
+	Author:	Edwin Amsler <edwinguy@gmail.com>
+	Date:	March 10, 2012
+	
+	This is a compilation of findings for how to read data off of the
+	PlayStation 1 memory card devices. The primary goal here is to be
+	clear and concise. Neither of which I'm good at :D
+	
+	Documenting the protocol is the highest priority here. Until I
+	add that here, you can find other great resources on the subject
+******************************************************************************/

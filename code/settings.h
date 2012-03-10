@@ -17,17 +17,17 @@
 // options down there...
 typedef enum CONFIGURE
 {
-	INIT,		// No properties
-	VOLUME,		// 4  bit value
-	BRIGHTNESS,	// 2  bit value
-	ATTACK,		// 4  bit value
-	DECAY,		// 4  bit value
-	SUSTAIN,	// 4  bit value
-	RELEASE,	// 4  bit value
-	WAVEFORM,	// Enumeration
-	PULSEWIDTH,	// 12 bit value
-	SYNC,		// yes/no
-	RING		// yes/no
+	INIT 		=  0,	// No properties
+	VOLUME		=  1,	// 4  bit value
+	BRIGHTNESS	=  2,	// 2  bit value
+	ATTACK		=  3,	// 4  bit value
+	DECAY		=  4,	// 4  bit value
+	SUSTAIN		=  5,	// 4  bit value
+	RELEASE		=  6,	// 4  bit value
+	WAVEFORM	=  7,	// Enumeration
+	PULSEWIDTH	=  8,	// 12 bit value
+	SYNC		=  9,	// yes/no
+	RING		= 10 	// yes/no
 } CONFIGURE;
 
 typedef enum DELTA
