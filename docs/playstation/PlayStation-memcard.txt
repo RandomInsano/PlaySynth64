@@ -10,3 +10,13 @@
 	Documenting the protocol is the highest priority here. Until I
 	add that here, you can find other great resources on the subject
 ******************************************************************************/
+
+On-Chip Format:
+	[16] Blocks (15 for saving, one for FAT)
+	[64] Frames per block
+	
+	Frames are the smallest unit we can read or write. They're 128 bytes
+	while the blocks they're part of are 8K.
+	
+	
+	
