@@ -65,6 +65,9 @@ typedef union Controller
 	unsigned int	buttons;
 } Controller;
 
+#define PSM_FRAME_LEN	128
+
+
 unsigned char PlayStationComm(unsigned char);
 void PlayStationInit();
 Controller readController();
