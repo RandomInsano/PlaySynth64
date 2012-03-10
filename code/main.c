@@ -34,7 +34,7 @@ const unsigned short int notes[13][2] =
 };
 
 #define FOSC	2000000	// Clock Speed
-#define BAUD	   4800	// Desired baud rate
+#define BAUD	   9600	// Desired baud rate
 
 #define byte	unsigned char
 #define uint16  unsigned short int
