@@ -61,8 +61,8 @@ void buttonDelta(unsigned int *input, unsigned int *history)
 void configure()
 {
 	static CONFIGURE state;
-	static uint16 scrollcredits;		// How far to scroll the credits
-	const char* credits = "Edwin Amsler 2010 to 2012   Edwin Amsler 2010 to 2012";
+	//static uint16 scrollcredits;		// How far to scroll the credits
+	//const char* credits = "Edwin Amsler 2010 to 2012   Edwin Amsler 2010 to 2012";
 
 	Controller control;
 	unsigned int oldControl	= 0;
@@ -201,7 +201,7 @@ void configure()
 					changed = 0;
 				}
 				decay = changeNumber(decay, 15, &settingDelta);
-				SIDSet(ATK_DECAY, attack << 4 | decay & 0x0F);
+				SIDSet(ATK_DECAY, (attack << 4) | (decay & 0x0F));
 				break;
 
 			case SUSTAIN:
@@ -213,7 +213,7 @@ void configure()
 					changed = 0;
 				}
 				sustain = changeNumber(sustain, 15, &settingDelta);
-				SIDSet(STN_RLS, sustain << 4 | release & 0x0F);
+				SIDSet(STN_RLS, (sustain << 4) | (release & 0x0F));
 				break;
 
 			case RELEASE:
@@ -225,7 +225,7 @@ void configure()
 					changed = 0;
 				}
 				release = changeNumber(release, 15, &settingDelta);
-				SIDSet(STN_RLS, sustain << 4 | release & 0x0F);
+				SIDSet(STN_RLS, (sustain << 4) | (release & 0x0F));
 				break;
 
 			case WAVEFORM:
@@ -255,6 +255,9 @@ void configure()
 				}
 				break;
 		}
+
+		// TODO: Another switch statement for setting registers (remove code dupe)
+		// TODO: Store text headers in an array that's indexed by state (remove yet more code dupe)
 	}
 }
 
