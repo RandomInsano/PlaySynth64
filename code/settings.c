@@ -95,18 +95,31 @@ void configure()
 				put(VFD_FF);
 
 				// Don't save if nothing changed
-				if (!(changed & UPDATE_EEPROM))
+				if (0 == (changed & UPDATE_EEPROM))
 					return;
 
 				print("Saving settings...");
 
-				eeprom_write_byte((uint8_t*)VOLUME,     volume);
-				eeprom_write_byte((uint8_t*)BRIGHTNESS, brightness);
-				eeprom_write_byte((uint8_t*)ATTACK,     attack);
-				eeprom_write_byte((uint8_t*)DECAY,      decay);
-				eeprom_write_byte((uint8_t*)SUSTAIN,    sustain);
-				eeprom_write_byte((uint8_t*)RELEASE,    release);
-				eeprom_write_byte((uint8_t*)WAVEFORM,   waveform);
+				if (volume != eeprom_read_byte((uint8_t*)VOLUME))
+					eeprom_write_byte((uint8_t*)VOLUME, volume);
+
+				if (brightness != eeprom_read_byte((uint8_t*)BRIGHTNESS))
+					eeprom_write_byte((uint8_t*)BRIGHTNESS, brightness);
+
+				if (attack != eeprom_read_byte((uint8_t*)ATTACK))
+					eeprom_write_byte((uint8_t*)ATTACK, attack);
+
+				if (decay != eeprom_read_byte((uint8_t*)DECAY))
+					eeprom_write_byte((uint8_t*)DECAY, decay);
+
+				if (sustain != eeprom_read_byte((uint8_t*)SUSTAIN))
+					eeprom_write_byte((uint8_t*)SUSTAIN, sustain);
+
+				if (release != eeprom_read_byte((uint8_t*)RELEASE))
+					eeprom_write_byte((uint8_t*)RELEASE, release);
+
+				if (waveform != eeprom_read_byte((uint8_t*)WAVEFORM))
+					eeprom_write_byte((uint8_t*)WAVEFORM, waveform);
 
 				// Mark that we saved data
 				eeprom_write_byte(INIT, 1);
@@ -127,10 +140,12 @@ void configure()
 
 			case PS_LEFT:
 				settingDelta = DECREMENT;
+				changed |= UPDATE_EEPROM;
 				break;
 
 			case PS_RIGHT:
 				settingDelta = INCREMENT;
+				changed |= UPDATE_EEPROM;
 				break;
 
 			default:		// If no buttons press, go back to
@@ -167,7 +182,6 @@ void configure()
 					put(VFD_FF);
 					print("Brightness:      <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				brightness = changeNumber(brightness, 3, &settingDelta);
 				put(VFD_ESC);
@@ -183,7 +197,6 @@ void configure()
 					put(VFD_FF);
 					print("Note Attack:     <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				
 				// There's something critically wrong here (and in other cases below).
@@ -207,7 +220,6 @@ void configure()
 					put(VFD_FF);
 					print("Note Decay:      <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				decay = changeNumber(decay, 15, &settingDelta);
 				SIDSet(ATK_DECAY, (attack << 4) | (decay & 0x0F));
@@ -220,7 +232,6 @@ void configure()
 					put(VFD_FF);
 					print("Note Sustain:    <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				sustain = changeNumber(sustain, 15, &settingDelta);
 				SIDSet(STN_RLS, (sustain << 4) | (release & 0x0F));
@@ -233,7 +244,6 @@ void configure()
 					put(VFD_FF);
 					print("Note Release:    <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				release = changeNumber(release, 15, &settingDelta);
 				SIDSet(STN_RLS, (sustain << 4) | (release & 0x0F));
@@ -246,7 +256,6 @@ void configure()
 					put(VFD_FF);
 					print("Waveform Type:   <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				waveform = changeEnum(waveformEnum, waveform, 3, &settingDelta);
 				//controlRegister &= 0xF0;
