@@ -60,7 +60,7 @@ void buttonDelta(unsigned int *input, unsigned int *history)
 // a simple song as we go.
 void configure()
 {
-	static CONFIGURE state;
+	CONFIGURE state;
 	//static uint16 scrollcredits;		// How far to scroll the credits
 	//const char* credits = "Edwin Amsler 2010 to 2012   Edwin Amsler 2010 to 2012";
 
