@@ -11,7 +11,7 @@ What it can do so far:
 -----------------------
 
 Configure voice #1 of the SID chip. Such enticing configurables as:
-  - Triangle, Sawtooth, Sine, Random waveforms.
+  - Triangle, Sawtooth, Square, Random waveforms.
   - ADSR Envelope (http://en.wikipedia.org/wiki/Synthesizer#ADSR_envelope)
   - Volume!
 
