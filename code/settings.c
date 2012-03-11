@@ -121,8 +121,8 @@ void configure()
 				if (waveform != eeprom_read_byte((uint8_t*)WAVEFORM))
 					eeprom_write_byte((uint8_t*)WAVEFORM, waveform);
 
-				// Mark that we saved data
-				eeprom_write_byte(INIT, 1);
+				// Mark that we saved data. EEPROM inits to 0xFF on programming
+				eeprom_write_byte(INIT, 0);
 
 				put(VFD_CLR);
 				put(VFD_FF);
@@ -169,7 +169,6 @@ void configure()
 					put(VFD_FF);
 					print("Volume:          <->");
 					changed &= ~UPDATE_SCREEN;
-					changed |=  UPDATE_EEPROM;
 				}
 				volume = changeNumber(volume, 15, &settingDelta);
 				SIDSet(MODE_VOL, volume & 0x0F);
@@ -284,8 +283,8 @@ void LoadConfig()
 	// Load SID registers from EEPROM
 	// TODO: Show some sort of progress or loading message
 
-	// Load our settings from EEPROM
-	if (eeprom_read_byte(INIT))
+	// Load our settings from EEPROM. Since default is 0xFF we need to look for 0x00
+	if (!eeprom_read_byte(INIT))
 	{
 		volume     = eeprom_read_byte((uint8_t*)VOLUME);
 		brightness = eeprom_read_byte((uint8_t*)BRIGHTNESS);
