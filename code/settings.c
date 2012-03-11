@@ -32,6 +32,18 @@ const char *waveformEnum[4] =
 			"Noise"
 	};
 
+// various configurable options.
+// NOTE: If we run out of memory, we can use Flash for swapping these
+//       values since we only read on boot, and when we run the config
+//       menu. We also only write on menu exit.
+unsigned char volume		= 15;
+unsigned char brightness	= 3;
+unsigned char attack		= 0;
+unsigned char decay			= 9;
+unsigned char sustain		= 0;
+unsigned char release		= 0;
+unsigned char waveform		= 0;
+
 // Keeps track of what buttons were pressed.
 void buttonDelta(unsigned int *input, unsigned int *history)
 {
@@ -57,21 +69,12 @@ void configure()
 	unsigned int changed	= 0;	// If the menu needs updating
 	DELTA settingDelta 		= NONE;	// How much to change the current setting
 
-	state = INIT;
-
-	// various configurable options
-	static unsigned char volume		= 15;
-	static unsigned char brightness	= 3;
-	static unsigned char attack		= 0;
-	static unsigned char decay		= 9;
-	static unsigned char sustain	= 0;
-	static unsigned char release	= 0;
-	static unsigned char waveform	= 0;
-
 	put(VFD_CLR);
 	put(VFD_FF);
 	println("Config Mode:");
 	print("Use directional pad");
+
+	state = INIT;
 
 	for(;;)
 	{
@@ -88,6 +91,21 @@ void configure()
 		switch (control.buttons)
 		{
 			case PS_SELECT:	// Escape config mode
+				put(VFD_CLR);
+				put(VFD_FF);
+				print("Saving settings...");
+
+				eeprom_write_byte((uint8_t*)VOLUME,     volume);
+				eeprom_write_byte((uint8_t*)BRIGHTNESS, brightness);
+				eeprom_write_byte((uint8_t*)ATTACK,     attack);
+				eeprom_write_byte((uint8_t*)DECAY,      decay);
+				eeprom_write_byte((uint8_t*)SUSTAIN,    sustain);
+				eeprom_write_byte((uint8_t*)RELEASE,    release);
+				eeprom_write_byte((uint8_t*)WAVEFORM,   waveform);
+
+				// Mark that we saved data
+				eeprom_write_byte(INIT, 1);
+
 				put(VFD_CLR);
 				put(VFD_FF);
 				return;
@@ -170,7 +188,7 @@ void configure()
 				//SIDSet(ATK_DECAY, attack << 4);
 				
 				// EX: (Need to verify this works)
-				SIDSet(ATK_DECAY, attack << 4 || decay & 0x0F);
+				SIDSet(ATK_DECAY, (attack << 4) | (decay & 0x0f));
 				
 				break;
 
@@ -183,7 +201,7 @@ void configure()
 					changed = 0;
 				}
 				decay = changeNumber(decay, 15, &settingDelta);
-				SIDSet(ATK_DECAY, attack << 4 || decay & 0x0F);
+				SIDSet(ATK_DECAY, attack << 4 | decay & 0x0F);
 				break;
 
 			case SUSTAIN:
@@ -195,7 +213,7 @@ void configure()
 					changed = 0;
 				}
 				sustain = changeNumber(sustain, 15, &settingDelta);
-				SIDSet(STN_RLS, sustain << 4 || release & 0x0F);
+				SIDSet(STN_RLS, sustain << 4 | release & 0x0F);
 				break;
 
 			case RELEASE:
@@ -207,7 +225,7 @@ void configure()
 					changed = 0;
 				}
 				release = changeNumber(release, 15, &settingDelta);
-				SIDSet(STN_RLS, sustain << 4 || release & 0x0F);
+				SIDSet(STN_RLS, sustain << 4 | release & 0x0F);
 				break;
 
 			case WAVEFORM:
@@ -238,6 +256,38 @@ void configure()
 				break;
 		}
 	}
+}
+
+// Configure hardware based on EEPROM settings
+void LoadConfig()
+{
+	// Load SID registers from EEPROM
+	// TODO: Show some sort of progress or loading message
+
+	// Load our settings from EEPROM
+	if (eeprom_read_byte(INIT))
+	{
+		volume     = eeprom_read_byte((uint8_t*)VOLUME);
+		brightness = eeprom_read_byte((uint8_t*)BRIGHTNESS);
+		attack     = eeprom_read_byte((uint8_t*)ATTACK);
+		decay      = eeprom_read_byte((uint8_t*)DECAY);
+		sustain    = eeprom_read_byte((uint8_t*)SUSTAIN);
+		release    = eeprom_read_byte((uint8_t*)RELEASE);
+		waveform   = eeprom_read_byte((uint8_t*)WAVEFORM);
+	}
+
+	// Configure SID registers
+	SIDSet(MODE_VOL,        (0 << 4) | (volume  & 0x0f));	// Filter mode not implemented yet
+	SIDSet(ATK_DECAY,  (attack << 4) | (decay   & 0x0f));
+	SIDSet(STN_RLS,   (sustain << 4) | (release & 0x0f));
+	SIDSet(CONTROL, 1 << (4 + waveform));				// There's more to configure in this register,
+														// I just haven't enabled that yet
+	controlRegister = 0x13;
+
+	// Set VFD brightness
+	put(VFD_ESC);
+	put(VFDA_LUM);
+	put(brightness * 64);
 }
 
 // Plays a single note if it's time

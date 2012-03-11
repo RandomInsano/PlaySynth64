@@ -7,6 +7,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "avr/eeprom.h"
+
 #include "playstation.h"
 #include "mos8580.h"
 #include "noritake_vfd.h"
@@ -15,6 +17,7 @@
 // yet. Need to crack open my C64 Programmer's
 // Reference book to figure out the last three
 // options down there...
+// This enum pulls double duty for EEPROM setting addresses
 typedef enum CONFIGURE
 {
 	INIT,		// No properties
@@ -43,5 +46,7 @@ void configure();
 unsigned char changeValue(unsigned char, unsigned char, DELTA*);
 unsigned char changeNumber(unsigned char, unsigned char, DELTA*);
 unsigned char changeEnum(const char**, unsigned char, unsigned char, DELTA*);
+
+void LoadConfig();
 
 #endif
