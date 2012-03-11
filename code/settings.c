@@ -66,7 +66,7 @@ void configure()
 
 	Controller control;
 	unsigned int oldControl	= 0;
-	unsigned int changed	= 0;	// If the menu needs updating
+	uint8 changed	= 0;	// If we need to redraw the screen or update the eeprom
 	DELTA settingDelta 		= NONE;	// How much to change the current setting
 
 	put(VFD_CLR);
@@ -93,6 +93,11 @@ void configure()
 			case PS_SELECT:	// Escape config mode
 				put(VFD_CLR);
 				put(VFD_FF);
+
+				// Don't save if nothing changed
+				if (!(changed & UPDATE_EEPROM))
+					return;
+
 				print("Saving settings...");
 
 				eeprom_write_byte((uint8_t*)VOLUME,     volume);
@@ -112,12 +117,12 @@ void configure()
 
 			case PS_UP:		// Go to previous config option
 				state--;
-				changed = 1;
+				changed |= UPDATE_SCREEN;
 				break;
 
 			case PS_DOWN:	// Go to next config option
 				state++;
-				changed = 1;
+				changed |= UPDATE_SCREEN;
 				break;
 
 			case PS_LEFT:
@@ -148,7 +153,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Volume:          <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				volume = changeNumber(volume, 15, &settingDelta);
 				SIDSet(MODE_VOL, volume & 0x0F);
@@ -160,7 +166,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Brightness:      <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				brightness = changeNumber(brightness, 3, &settingDelta);
 				put(VFD_ESC);
@@ -175,7 +182,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Note Attack:     <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				
 				// There's something critically wrong here (and in other cases below).
@@ -198,7 +206,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Note Decay:      <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				decay = changeNumber(decay, 15, &settingDelta);
 				SIDSet(ATK_DECAY, (attack << 4) | (decay & 0x0F));
@@ -210,7 +219,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Note Sustain:    <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				sustain = changeNumber(sustain, 15, &settingDelta);
 				SIDSet(STN_RLS, (sustain << 4) | (release & 0x0F));
@@ -222,7 +232,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Note Release:    <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				release = changeNumber(release, 15, &settingDelta);
 				SIDSet(STN_RLS, (sustain << 4) | (release & 0x0F));
@@ -234,7 +245,8 @@ void configure()
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("Waveform Type:   <->");
-					changed = 0;
+					changed &= ~UPDATE_SCREEN;
+					changed |=  UPDATE_EEPROM;
 				}
 				waveform = changeEnum(waveformEnum, waveform, 3, &settingDelta);
 				//controlRegister &= 0xF0;
@@ -243,16 +255,12 @@ void configure()
 				break;
 
 			default:
-				if (changed)
-				{
-					put(VFD_CLR);
-					put(VFD_FF);
-					print("    PlaySynth 64    ");
+				put(VFD_CLR);
+				put(VFD_FF);
+				print("    PlaySynth 64    ");
 
-					// I broke the credits :(
+				// I broke the credits :(
 
-					changed = 0;
-				}
 				break;
 		}
 

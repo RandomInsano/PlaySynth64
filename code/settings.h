@@ -13,6 +13,9 @@
 #include "mos8580.h"
 #include "noritake_vfd.h"
 
+#define UPDATE_SCREEN 0x01
+#define UPDATE_EEPROM 0x02
+
 // Not all of these configurations are settable
 // yet. Need to crack open my C64 Programmer's
 // Reference book to figure out the last three
