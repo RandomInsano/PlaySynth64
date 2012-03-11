@@ -156,7 +156,7 @@ int main()
 				put(VFD_CR);
 				print("Playing ");
 				print("O=");
-				printnum(octave);
+				putnum(octave);
 				print(" ");
 				put(note);
 				put(note >> 8);	// If there's a sharp, show it

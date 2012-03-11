@@ -6,6 +6,7 @@
 
 #include <avr/io.h>
 #include "noritake_vfd.h"
+#include "main.h"
 
 // From ATMEGA16 data sheet
 void USART_Init(unsigned short int ubrr)
@@ -58,43 +59,44 @@ void println(const char* message)
 // Print a single digit. Undefined if > 9
 void putnum(unsigned char num)
 {
-	put(num + 48); // 48 is ASCII code for 0
+	put(num + '0');
 }
 
-void printnum(unsigned int number)
+// Only print up to four digits for now.
+void printnuml(uint16 number, uint8 showleadingzeros)
 {
-	uint32_t	power = 1000000000; // 10 ^ 10
-	uint32_t	tempNum;
-	char		found = 0;
+	uint8  found = showleadingzeros;	// Have we found a leading digit yet?
+	uint16 temp;
+	uint16 power;
 
-	int			loop;
-
-	// Wow... What was I smoking when I wrote this?
-	for (loop = 10; loop > 2; loop--)
+	power = VFD_MAX_DIGITS;	// Consider this pow(10, x) where x is the numbers we can show
+	while (power >= 10)
 	{
-		// Trim off higher numbers
-		tempNum	 = number % power;
-		power	/= 10;
-		// Trim off lower numbers;
-		tempNum	/= (power);
+		// This odd four line block slices out a digit in from the input in
+		// order. Each iteration it will take the next number to the right
+		temp   = number % power;
+		power /= 10;
+		temp  /= power;
 
-		// Don't print leading zeros.
 		if (found)
 		{
-			putnum(tempNum);
+			putnum(temp);
 		}
-		else if (tempNum != 0)
+		else
 		{
-			// This elseif seems odd, but should save some cycles.
-			// If the comparison happened before 'if (found)',
-			// it would be executed every loop. This way, our
-			// test happens only if the first number hasn't been
-			// found.
-
-			found = 1;
-			putnum(tempNum);
+			if (temp)
+			{
+				found = 1;
+				putnum(temp);
+			}
 		}
 	}
 
-	putnum(number % 10);
+	if (!found)
+		putnum(0);
+}
+
+inline void printnum(uint16 number)
+{
+	printnuml(number, 0);
 }

@@ -7,6 +7,10 @@
 #ifndef NOTITAKE_VFD_H
 #define NOTITAKE_VFD_H
 
+#include "main.h"
+
+#define VFD_MAX_DIGITS 10000 // Mask for how many digits to show.
+
 #define VFD_BS		0x08	// Backspace
 #define VFD_HT		0x09	// Horizontal tab
 #define VFD_LF		0x0A	// Line feed
@@ -39,7 +43,8 @@ void VFDInit	(unsigned short int);
 
 void print		(const char*);
 void println	(const char*);
-void printnum	(unsigned int);
+void printnum	(uint16);
+void printnuml	(uint16, uint8);
 void put		(char);
 void putnum     (unsigned char);
 
