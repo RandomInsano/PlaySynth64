@@ -10,6 +10,8 @@
 #include "main.h"
 
 #define VFD_MAX_DIGITS 10000 // Mask for how many digits to show.
+#define VFD_WIDTH	20
+#define VFD_HEIGHT	2
 
 #define VFD_BS		0x08	// Backspace
 #define VFD_HT		0x09	// Horizontal tab

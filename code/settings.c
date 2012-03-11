@@ -49,6 +49,9 @@ void buttonDelta(unsigned int *input, unsigned int *history)
 void configure()
 {
 	static CONFIGURE state;
+	static uint16 scrollcredits;		// How far to scroll the credits
+	const char* credits = "Edwin Amsler 2010 to 2012   Edwin Amsler 2010 to 2012";
+
 	Controller control;
 	unsigned int oldControl	= 0;
 	unsigned int changed	= 0;	// If the menu needs updating
@@ -111,11 +114,12 @@ void configure()
 				continue;	// the top of the loop
 		}
 
-		state %= WAVEFORM + 1;	// So we don't navigate to nowhere.
-								// As confusing as it is, WAVEFORM is just
-								// the last configuration option. When adding
-								// new options, change this. Should have used
-								// a sentry value
+		// So we don't navigate to nowhere.
+		// As confusing as it is, WAVEFORM is just
+		// the last configuration option. When adding
+		// new options, change this. Should have used
+		// a sentry value
+		state %= (uint8)WAVEFORM + 1;
 
 		// Draw our menu
 		switch (state)
@@ -179,7 +183,7 @@ void configure()
 					changed = 0;
 				}
 				decay = changeNumber(decay, 15, &settingDelta);
-				SIDSet(ATK_DECAY, decay & 0x0F);
+				SIDSet(ATK_DECAY, attack << 4 || decay & 0x0F);
 				break;
 
 			case SUSTAIN:
@@ -191,7 +195,7 @@ void configure()
 					changed = 0;
 				}
 				sustain = changeNumber(sustain, 15, &settingDelta);
-				SIDSet(STN_RLS, sustain << 4);
+				SIDSet(STN_RLS, sustain << 4 || release & 0x0F);
 				break;
 
 			case RELEASE:
@@ -203,7 +207,7 @@ void configure()
 					changed = 0;
 				}
 				release = changeNumber(release, 15, &settingDelta);
-				SIDSet(STN_RLS, release & 0x0F);
+				SIDSet(STN_RLS, sustain << 4 || release & 0x0F);
 				break;
 
 			case WAVEFORM:
@@ -223,12 +227,12 @@ void configure()
 			default:
 				if (changed)
 				{
-					//TODO: Scrolling credits. Left to right
-					
 					put(VFD_CLR);
 					put(VFD_FF);
 					print("    PlaySynth 64    ");
-					print("EAmsler 2010 to 2012");
+
+					// I broke the credits :(
+
 					changed = 0;
 				}
 				break;
@@ -292,14 +296,14 @@ unsigned char changeValue(unsigned char currvalue, unsigned char maxvalue, DELTA
 {
 	if (*delta == DECREMENT)
 	{
-		if (currvalue - 1 < maxvalue)	// Make sure we don't underflow
-			currvalue--;
+		currvalue--;
 	}
 	else if (*delta == INCREMENT)
 	{
-		if (currvalue < maxvalue)
-			currvalue++;
+		currvalue++;
 	}
+
+	currvalue %= maxvalue + 1;
 
 	*delta = NONE;
 
