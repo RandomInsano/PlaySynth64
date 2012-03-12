@@ -6,4 +6,6 @@
 #define uint8 unsigned char
 #define uint16 unsigned short int
 
+#define MAIN_BASE_OCTAVE	5
+
 #endif

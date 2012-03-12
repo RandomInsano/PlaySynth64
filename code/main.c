@@ -59,6 +59,7 @@ int main()
 	uint16 note;
 	byte   octave;
 	byte   noteIndex;
+	char   base;					// Used to calculate the current octave
 
 	println("Play mode:");
 
@@ -124,15 +125,12 @@ int main()
 		frequency	= notes[noteIndex][0];
 		note		= notes[noteIndex][1];
 
-		// My old math made the program binary too big for the AVR.
-		// The work is now based on the formula Freq = note x 2^(N/12). 
-		// Note is the current note's frequency, N is how many notes
-		// we want to shift up or down.
-		// Fancy bit shifting allows the shoulder buttons to represent
-		// a number between 0 and 7 inclusive
-		octave  = (control.buttons & PS_L2) >> 8;
-		octave |= (control.buttons & PS_L1) >> 9;
-		octave |= (control.buttons & PS_R1) >> 9;
+		base		= (control.buttons & PS_L2) >> 8;
+		base	   |= (control.buttons & PS_L1) >> 9;
+
+		if (control.buttons & PS_R1)
+			octave	= MAIN_BASE_OCTAVE - base;
+
 		frequency <<= octave;
 
 		if (frequency != oldFrequency)
