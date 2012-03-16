@@ -257,8 +257,8 @@ void configure()
 					changed &= ~UPDATE_SCREEN;
 				}
 				waveform = changeEnum(waveformEnum, waveform, 3, &settingDelta);
-				//controlRegister &= 0xF0;
-				controlRegister = 1 << (4 + waveform);
+				controlRegister &= 0xF0;
+				controlRegister |= 1 << (4 + waveform);
 				SIDSet(CONTROL, controlRegister);
 				break;
 
@@ -299,9 +299,15 @@ void LoadConfig()
 	SIDSet(MODE_VOL,        (0 << 4) | (volume  & 0x0f));	// Filter mode not implemented yet
 	SIDSet(ATK_DECAY,  (attack << 4) | (decay   & 0x0f));
 	SIDSet(STN_RLS,   (sustain << 4) | (release & 0x0f));
-	SIDSet(CONTROL, 1 << (4 + waveform));				// There's more to configure in this register,
-														// I just haven't enabled that yet
+
+	// Configure duty cycle for the pulse waveform to be 50%. Too lazy to do bitwise math
+	SIDSet(PW_LOW, 2048);
+	SIDSet(PW_LOW, 2048 >> 8);
+
+	// There's more to configure in this register, I just haven't enabled that yet.
 	controlRegister = 0x13;
+	controlRegister &= 0xF0;	// Clean out stale waveform settings
+	SIDSet(CONTROL, controlRegister | (1 << (4 + waveform)));
 
 	// Set VFD brightness
 	put(VFD_ESC);
@@ -316,12 +322,9 @@ void playNote(unsigned short int time)
 	static unsigned int pause;
 	unsigned int frequency;
 
-	// Ran out of time. Was going to use
-	// a timer + interrupt to play notes at
-	// a constant speed. Really ashamed that 
-	// I didn't manage it
+	// TODO: Use a timer interrupt for this
 	pause++;
-	if (pause < 75)
+	if (pause < 200)
 		return;
 	else
 		pause = 0;
@@ -330,9 +333,9 @@ void playNote(unsigned short int time)
 	frequency = demoNotes[position++];
 
 	SIDSet(FREQ_HIGH, frequency >> 8);
-	SIDSet(FREQ_LOW,  frequency  & 0xFF);
-	SIDSet(CONTROL,   controlRegister);	// Release note
+	SIDSet(FREQ_LOW,  frequency);
 	SIDSet(CONTROL,   controlRegister | CNT_GATE);	// Gate the note (mute it)
+	SIDSet(CONTROL,   controlRegister);				// Release note
 }
 
 unsigned char changeEnum(const char **list, unsigned char currvalue, unsigned char maxvalue, DELTA *delta)
