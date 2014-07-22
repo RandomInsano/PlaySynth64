@@ -43,7 +43,7 @@ typedef enum DELTA
 	NONE
 } DELTA;
 
-void playNote(unsigned short int);
+void playNote(void);
 void configure(void);
 
 unsigned char changeValue(unsigned char, unsigned char, DELTA*);

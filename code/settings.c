@@ -78,7 +78,7 @@ void configure(void)
 
 	for(;;)
 	{
-		playNote(0);
+		playNote();
 		control = readController();
 
 		// Prevents key repeat when the user holds the button down
@@ -315,7 +315,7 @@ void LoadConfig(void)
 }
 
 // Plays a single note if it's time
-void playNote(unsigned short int time)
+void playNote(void)
 {
 	static int position;
 	static unsigned int pause;
