@@ -44,12 +44,12 @@ typedef enum DELTA
 } DELTA;
 
 void playNote(unsigned short int);
-void configure();
+void configure(void);
 
 unsigned char changeValue(unsigned char, unsigned char, DELTA*);
 unsigned char changeNumber(unsigned char, unsigned char, DELTA*);
 unsigned char changeEnum(const char**, unsigned char, unsigned char, DELTA*);
 
-void LoadConfig();
+void LoadConfig(void);
 
 #endif

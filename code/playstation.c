@@ -8,7 +8,7 @@
 #include <avr/interrupt.h>
 #include "playstation.h"
 
-Controller readController()
+Controller readController(void)
 {
 	Controller output;
 
@@ -33,7 +33,7 @@ Controller readController()
 
 // Example of polling controller for data.
 #ifdef EXAMPLE
-void sample()
+void sample(void)
 {
 	PlayStationInit();
 
@@ -76,7 +76,7 @@ void sample()
 }
 #endif
 
-void spiInit()
+void spiInit(void)
 {
 	// Default speed of PlayStation SPI bus is 250KHz, which didn't work for me. Slower allowed stable results
 	// Turns out during the presentation the whole thing fell apart. Reason was due to lack of a real pull-up
@@ -90,7 +90,7 @@ void spiInit()
 	SPCR  |= (1 << SPR0) | (1 << SPI2X);				// SPI clock. Should be running at 250KHz (FOSC / 8)
 }
 
-void PlayStationInit()
+void PlayStationInit(void)
 {
 	spiInit();
 }

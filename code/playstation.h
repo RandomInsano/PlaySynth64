@@ -66,7 +66,7 @@ typedef union Controller
 } Controller;
 
 unsigned char PlayStationComm(unsigned char);
-void PlayStationInit();
-Controller readController();
+void PlayStationInit(void);
+Controller readController(void);
 
 #endif

@@ -58,7 +58,7 @@ void buttonDelta(unsigned int *input, unsigned int *history)
 
 // Run a state machine testing for inputs, which plays
 // a simple song as we go.
-void configure()
+void configure(void)
 {
 	CONFIGURE state;
 	//static uint16 scrollcredits;		// How far to scroll the credits
@@ -278,7 +278,7 @@ void configure()
 }
 
 // Configure hardware based on EEPROM settings
-void LoadConfig()
+void LoadConfig(void)
 {
 	// Load SID registers from EEPROM
 	// TODO: Show some sort of progress or loading message

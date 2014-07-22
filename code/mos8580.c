@@ -9,14 +9,14 @@
 #include "mos8580.h"
 #include "noritake_vfd.h"
 
-void delay()
+void delay(void)
 {
 	unsigned short int a;
 	for (a = 0; a < 10; a++) PORTC ^= 1;
 }
 
 // Initialize hardware to talk to the SID chip.
-void SIDInit()
+void SIDInit(void)
 {
 	// Create an external 1MHz clock pulse on OC2
 	TCCR2 |= (1 << WGM21);	// Clear TCNT2 on OCR2 match

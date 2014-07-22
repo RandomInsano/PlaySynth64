@@ -46,7 +46,7 @@ void printbyte(byte output)
 	print("] ");
 }
 
-int main()
+int main(void)
 {
 	// Initialize devices
 	PlayStationInit();

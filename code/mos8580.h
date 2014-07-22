@@ -88,7 +88,7 @@
 // Sadly, most all registers on the SID are write only
 unsigned char controlRegister;
 
-void SIDInit();
+void SIDInit(void);
 void SIDSet(unsigned char, unsigned char);
 
 #endif
