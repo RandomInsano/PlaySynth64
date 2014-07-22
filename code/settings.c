@@ -301,7 +301,6 @@ void LoadConfig(void)
 	SIDSet(STN_RLS,   (sustain << 4) | (release & 0x0f));
 
 	// Configure duty cycle for the pulse waveform to be 50%. Too lazy to do bitwise math
-	SIDSet(PW_LOW, 2048);
 	SIDSet(PW_LOW, 2048 >> 8);
 
 	// There's more to configure in this register, I just haven't enabled that yet.
