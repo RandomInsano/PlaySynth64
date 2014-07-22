@@ -13,7 +13,7 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 SET(CSTANDARD "-std=gnu99")
 SET(CDEBUG "-gstabs")
-SET(CWARN "-Wall -Wstrict-prototypes")
+SET(CWARN "-Wall -Wextra -Wstrict-prototypes")
 SET(CTUNING "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums")
 SET(COPT "-Os")
 SET(CMCU "-mmcu=atmega16")
